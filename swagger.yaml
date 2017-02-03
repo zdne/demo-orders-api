@@ -2,24 +2,56 @@ swagger: '2.0'
 info:
   title: '[Demo] Oders API (WIP)'
   description: | 
+    _This template is work in progress_
+    
     API template conforming to the [adidas API guidelines](https://adidas-group.gitbooks.io/api-guidelines/content/).
     
   version: '0.1.0'
 schemes:
-  - http
   - https
 basePath: /
 produces:
   - application/vnd.siren+json
 paths:
   /:
+    x-summary: API Root
+
     get:
-      summary: Root
+      summary: Retrieve
       responses:
         200:
           description: The root of the API.
           schema:
             $ref: '#/definitions/RootResponse'
+
+  /orders:
+    x-summary: Orders
+    
+    get: 
+      summary: Retrieve List of Orders
+      responses:
+        200:
+          description: List of Orders
+          schema:
+            $ref: '#/definitions/SirenEntity'
+            
+  /orders/{orderId}:
+    x-summary: Order
+    parameters:
+      - name: orderId
+        in: path
+        description: Order id
+        required: true
+        type: string
+        x-example: 4731
+
+    get:
+      summary: Retrieve a Specific Order
+      responses:
+        200:
+          description: Specific Order
+          schema:
+            $ref: '#/definitions/SirenEntity'
       
 definitions:
   # API-specific data
@@ -42,7 +74,8 @@ definitions:
     example:
       message: Hello World!
       
-  # Siren data structure
+  # Siren data structures
+  # DO NOT EDIT BEYOND THIS POINT
   SirenEntity:
     type: object
     properties:
@@ -62,6 +95,7 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/SirenLink'
+
   SirenSubEntity:
     type: object
     properties:
@@ -91,6 +125,7 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/SirenLink'
+
   SirenAction:
     type: object
     required:
@@ -115,6 +150,7 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/SirenField'
+
   SirenField:
     type: object
     required:
@@ -148,6 +184,7 @@ definitions:
         type: string
       value:
         type: string
+
   SirenLink:
     type: object
     required:
