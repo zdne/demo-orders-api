@@ -1,0 +1,170 @@
+swagger: '2.0'
+info:
+  title: '[Demo] Oders API (WIP)'
+  description: | 
+    API template conforming to the [adidas API guidelines](https://adidas-group.gitbooks.io/api-guidelines/content/).
+    
+  version: '0.1.0'
+schemes:
+  - http
+  - https
+basePath: /
+produces:
+  - application/vnd.siren+json
+paths:
+  /:
+    get:
+      summary: Root
+      responses:
+        200:
+          description: The root of the API.
+          schema:
+            $ref: '#/definitions/RootResponse'
+      
+definitions:
+  # API-specific data
+  RootResponse:
+    type: object
+    allOf:
+      - $ref: '#/definitions/SirenEntity'
+      - properties:
+          properties:
+            $ref: '#/definitions/RootProperties'
+    example:
+      properties: 
+        $ref: '#/definitions/RootProperties/example'
+    
+  RootProperties:
+    type: object
+    properties:
+      name:
+        type: string
+    example:
+      message: Hello World!
+      
+  # Siren data structure
+  SirenEntity:
+    type: object
+    properties:
+      class:
+        type: array
+        items:
+          type: string
+      entities:
+        type: array
+        items:
+          $ref: '#/definitions/SirenSubEntity'
+      actions:
+        type: array
+        items:
+          $ref: '#/definitions/SirenAction'
+      links:
+        type: array
+        items:
+          $ref: '#/definitions/SirenLink'
+  SirenSubEntity:
+    type: object
+    properties:
+      href:
+        type: string
+      rel:
+        type: array
+        items:
+          type: string
+      class:
+        type: array
+        items:
+          type: string
+      properties:
+        type: object
+      entities:
+        type: array
+        # Apiary Beta Warning
+        #   the following should be uncommented once Apiary has the support circular references
+        #items:
+        #  $ref: '#/definitions/SirenSubEntity'
+      actions:
+        type: array
+        items:
+          $ref: '#/definitions/SirenAction'
+      links:
+        type: array
+        items:
+          $ref: '#/definitions/SirenLink'
+  SirenAction:
+    type: object
+    required:
+      - name
+      - href
+    properties:
+      class:
+        type: array
+        items:
+          type: string
+      name:
+        type: string
+      method:
+        type: string
+      href:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      fields:
+        type: array
+        items:
+          $ref: '#/definitions/SirenField'
+  SirenField:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+      type:
+        type: string
+        enum:
+          - hidden
+          - text
+          - search
+          - tel
+          - url
+          - email
+          - password
+          - datetime
+          - date
+          - month
+          - week
+          - time
+          - datetime-local
+          - number
+          - range
+          - color
+          - checkbox
+          - radio
+          - file
+      title:
+        type: string
+      value:
+        type: string
+  SirenLink:
+    type: object
+    required:
+      - rel
+      - href
+    properties:
+      class:
+        type: array
+        items:
+          type: string
+      title:
+        type: string
+      rel:
+        type: array
+        items:
+          type: string
+      href:
+        type: string
+      type:
+        type: string
