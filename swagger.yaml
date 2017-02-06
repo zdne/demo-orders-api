@@ -3,7 +3,7 @@ info:
   version: '1.0.0'
   title: '[Demo] Orders API (WIP)'
   description: ''
-  
+
 schemes:
   - https
 
@@ -19,14 +19,8 @@ paths:
         200:
           description: The root of the API
           schema:
-            $ref: '#/definitions/hal-resource'
-            example:
-              _links:
-                self:
-                  href: /
-                orders:
-                  href: /orders
-                  
+            $ref: '#/definitions/apiroot-hal'
+
   /orders:
     x-summary: List of Orders
     
@@ -37,7 +31,7 @@ paths:
           description: The list of Orders
           schema:
             $ref: '#/definitions/hal-resource'
-    
+
     post:
       summary: Create a new Order
       consumes:
@@ -48,13 +42,13 @@ paths:
           description: Order to be created
           required: true
           schema:
-            $ref: '#/definitions/new-order'
+            $ref: '#/definitions/order'
       responses: 
         201:
           description: Order has been created.
           schema:
             $ref: '#/definitions/hal-resource'
-            
+
   /orders/{orderId}:
     x-summary: Order
     parameters:
@@ -71,12 +65,8 @@ paths:
         200:
           description: A particular Order
           schema:
-            $ref: '#/definitions/hal-resource'
-            example:
-              _link:
-                self:
-                  href: /orders/1234
-                  
+            $ref: '#/definitions/order-hal'
+
     patch:
       summary: Update Order
       responses:
@@ -84,27 +74,56 @@ paths:
           description: The Order was updated
           schema:
             $ref: '#/definitions/hal-resource'
-            example:
-              _link:
-                self:
-                  href: /orders/1234          
-    
+
     delete:
       summary: Delete Order
+      produces: []
       responses:
         204:
           description: The Order was deleted
 
-
 definitions:
-  new-order:
+  apiroot-hal:
+    type: object
+    allOf:
+      - $ref: '#/definitions/hal-resource'
+    example:
+      _links:
+        self:
+          href: /
+        orders:
+          href: /orders
+    
+  order-hal:
+    type: object
+    allOf:
+      - $ref: '#/definitions/hal-resource'
+      - $ref: '#/definitions/order'
+    example:
+      _links:
+        self:
+          href: /orders/1234
+      orderNumber: 1234
+      itemCount: 42
+      status: pending
+
+  order:
     type: object
     properties:
-      message:
+      orderNumber:
+        type: number
+      itemCount:
+        type: number
+      status:
         type: string
+    required:
+      - orderNumber
+      - itemCount
     example:
-      message: Hello!
-      
+      orderNumber: 42
+      itemCount: 3
+      status: pending
+
   hal-link-object:
     title: HAL Link Object
     description: A Link Object represents a hyperlink from the containing resource to a URI.
