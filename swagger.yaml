@@ -30,7 +30,7 @@ paths:
         200:
           description: The list of Orders
           schema:
-            $ref: '#/definitions/hal-resource'
+            $ref: '#/definitions/hal-orders'
 
     post:
       summary: Create a new Order
@@ -102,7 +102,20 @@ definitions:
           href: /
         orders:
           href: /orders
-    
+  
+  hal-orders:
+    type: object
+    allOf:
+      - $ref: '#/definitions/hal-resource'
+    example:
+      _links:
+        self:
+          href: /orders
+      
+      _embedded:
+        order:
+          $ref: '#/definitions/hal-order/example'
+  
   hal-order:
     type: object
     allOf:
