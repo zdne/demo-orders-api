@@ -108,6 +108,7 @@ definitions:
           the containing "_links" object is a property.
         type: object
         additionalProperties:
+          # WARN: Should be "anyOf" but "anyOf" isn't supported in Swagger 2.0
           allOf:
             - $ref: '#/definitions/hal-link-object'
             - type: array
