@@ -14,7 +14,7 @@ paths:
       summary: Retrieve API Root
       responses:
         200:
-          description: The root of the API.
+          description: The root of the API
           schema:
             $ref: '#/definitions/hal-resource'
             example:
@@ -23,18 +23,28 @@ paths:
                   href: /
                 orders:
                   href: /orders
+                  
+  /orders:
+    x-summary: A list of Orders
+    
+    get:
+      summary: Retrieve list of Orders
+      responses:
+        200:
+          description: The list of Orders
+          schema:
+            $ref: '#/definitions/hal-resource'
+    
+    post:
+      summary: Create a new Order
+      responses: 
+        201:
+          description: Order has been created.
+          schema:
+            $ref: '#/definitions/hal-resource'
+          
 
 definitions:
-  APIRootResponse:
-    type: object
-    properties:
-      message:
-        type: string
-    required:
-      - message
-    example:
-      message: Hello World and Hello Z!
-
   hal-link-object:
     title: HAL Link Object
     description: A Link Object represents a hyperlink from the containing resource to a URI.
