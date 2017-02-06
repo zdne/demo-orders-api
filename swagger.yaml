@@ -1,257 +1,117 @@
 swagger: '2.0'
 info:
-  title: '[Demo] Oders API (WIP)'
-  description: | 
-    _This template is work in progress_
-    
-    API template conforming to the [adidas API guidelines](https://adidas-group.gitbooks.io/api-guidelines/content/).
-    
-  version: '0.1.0'
-schemes:
-  - https
-basePath: /
-produces:
-  - application/vnd.siren+json
-paths:
-  /:
-    x-summary: API Root
-
-    get:
-      summary: Retrieve
-      responses:
-        200:
-          description: The root of the API.
-          schema:
-            $ref: '#/definitions/RootResponse'
-
-  /orders:
-    x-summary: Orders
-    
-    get: 
-      summary: Retrieve List of Orders
-      responses:
-        200:
-          description: List of Orders
-          schema:
-            $ref: '#/definitions/SirenEntity'
-            
-  /orders/{orderId}:
-    x-summary: Order
-    parameters:
-      - name: orderId
-        in: path
-        description: Order id
-        required: true
-        type: string
-        x-example: 4731
-
-    get:
-      summary: Retrieve a Specific Order
-      responses:
-        200:
-          description: Specific Order
-          schema:
-            $ref: '#/definitions/SirenEntity'
-            example:
-              class:
-              - order
-              properties:
-                orderNumber: 42
-                itemCount: 3
-                status: pending
-              entities:
-              - class:
-                - items
-                - collection
-                rel:
-                - http://x.io/rels/order-items
-                href: http://api.x.io/orders/42/items
-              - class:
-                - info
-                - customer
-                rel:
-                - http://x.io/rels/customer
-                properties:
-                  customerId: pj123
-                  name: Peter Joseph
-                links:
-                - rel:
-                  - self
-                  href: http://api.x.io/customers/pj123
-              actions:
-              - name: add-item
-                title: Add Item
-                method: POST
-                href: http://api.x.io/orders/42/items
-                type: application/x-www-form-urlencoded
-                fields:
-                - name: orderNumber
-                  type: hidden
-                  value: '42'
-                - name: productCode
-                  type: text
-                - name: quantity
-                  type: number
-              links:
-              - rel:
-                - self
-                href: http://api.x.io/orders/42
-              - rel:
-                - previous
-                href: http://api.x.io/orders/41
-              - rel:
-                - next
-                href: http://api.x.io/orders/43
-
+  version: '1.0.0'
+  title: '[Demo] Orders API (WIP)'
+  description: ''
+paths: {}
 definitions:
-  # API-specific data
-  RootResponse:
+  hal-link-object:
+    title: Link Object
+    description: A Link Object represents a hyperlink from the containing resource to a URI.
     type: object
+    required:
+      - href
+    properties:
+      href:
+        description: |
+          Its value is either a URI [RFC3986] or a URI Template [RFC6570]. If the value is a URI Template then 
+          the Link Object SHOULD have a "templated" attribute whose value is true.
+        type: string
+      templated:
+        description: | 
+          Its value is boolean and SHOULD be true when the Link Object's "href" property is a URI Template. 
+          Its value SHOULD be considered false if it is undefined or any other value than true.
+        type: boolean
+      type:
+        description: |
+          Its value is a string used as a hint to indicate the media type expected when dereferencing the target resource.
+        type: string
+      deprecation:
+        description: |
+          Its presence indicates that the link is to be deprecated (i.e. removed) at a future date. 
+          Its value is a URL that SHOULD provide further information about the deprecation. A client SHOULD provide some 
+          notification (for example, by logging a warning message) whenever it traverses over a link that has this property. 
+          The notification SHOULD include the deprecation property''s value so that a client maintainer can easily 
+          find information about the deprecation.
+        type: string
+      name:
+        description: |
+          Its value MAY be used as a secondary key for selecting Link Objects which share the same relation type.
+        type: string
+      profile:
+        description: |
+          Its value is a string which is a URI that hints about the profile [RFC6906] of the target resource.
+        type: string
+      title:
+        description: |
+          Its value is a string and is intended for labelling the link with a human-readable identifier (as defined by [RFC5988]).
+        type: string
+      hreflang:
+        description: |
+          Its value is a string and is intended for indicating the language of the target resource (as defined by [RFC5988]).
+        type: string
+    example:
+      href: /some/nice/url
+  hal-curies-link:
+    title: HAL Curies Link
+    description: | 
+      Custom link relation types (Extension Relation Types in [RFC5988]) SHOULD be URIs that when dereferenced in a web browser 
+      provide relevant documentation, in the form of an HTML page, about the meaning and/or behaviour of the target Resource. 
+      This will improve the discoverability of the API. The CURIE Syntax [W3C.NOTE-curie-20101216] MAY be used for brevity for these URIs. 
+      CURIEs are established within a HAL document via a set of Link Objects with the relation type "curies" on the root Resource Object. 
+      These links contain a URI Template with the token ''rel'', and are named via the "name" property.'
     allOf:
-      - $ref: '#/definitions/SirenEntity'
-      - properties:
-          properties:
-            $ref: '#/definitions/RootProperties'
+      - type: object
+        properties:
+          templated:
+            enum:
+              - true
+        required:
+          - templated
+      - $ref: '#/definitions/hal-link-object'
     example:
-      properties: 
-        $ref: '#/definitions/RootProperties/example'
-    
-  RootProperties:
+      templated: true
+      href: aute tempor nostrud
+      type: nisi
+      profile: Duis dolor sit amet
+      deprecation: mollit in
+      title: labore cupidatat dolore
+      hreflang: ut ullamco
+  hal-resource:
+    title: HAL Resource Object
+    description: |
+      'A Resource Object represents a resource. It has two reserved properties: (1) `_links` which contain links to other resources,'
+      'and (2) `_embedded` which contain embedded resources. All other properties MUST be valid JSON and represent the current state of the resource.'
     type: object
     properties:
-      name:
-        type: string
-    example:
-      message: Hello World!
-      
-  # Siren data structures
-  # DO NOT EDIT BEYOND THIS POINT
-  SirenEntity:
-    type: object
-    properties:
-      class:
-        type: array
-        items:
-          type: string
-      entities:
-        type: array
-        items:
-          $ref: '#/definitions/SirenSubEntity'
-      actions:
-        type: array
-        items:
-          $ref: '#/definitions/SirenAction'
-      links:
-        type: array
-        items:
-          $ref: '#/definitions/SirenLink'
-
-  SirenSubEntity:
-    type: object
-    properties:
-      href:
-        type: string
-      rel:
-        type: array
-        items:
-          type: string
-      class:
-        type: array
-        items:
-          type: string
-      properties:
+      _links:
+        description: |
+          It is an object whose property names are link relation types (as defined by [RFC5988]) and values are either 
+          a Link Object or an array of Link Objects.  The subject resource of these links is the Resource Object of which
+          the containing "_links" object is a property.
         type: object
-      entities:
-        type: array
-        # Apiary Beta Warning
-        #   the following should be uncommented once Apiary has the support circular references
-        #items:
-        #  $ref: '#/definitions/SirenSubEntity'
-      actions:
-        type: array
-        items:
-          $ref: '#/definitions/SirenAction'
-      links:
-        type: array
-        items:
-          $ref: '#/definitions/SirenLink'
-
-  SirenAction:
-    type: object
-    required:
-      - name
-      - href
-    properties:
-      class:
-        type: array
-        items:
-          type: string
-      name:
-        type: string
-      method:
-        type: string
-      href:
-        type: string
-      title:
-        type: string
-      type:
-        type: string
-      fields:
-        type: array
-        items:
-          $ref: '#/definitions/SirenField'
-
-  SirenField:
-    type: object
-    required:
-      - name
-    properties:
-      name:
-        type: string
-      type:
-        type: string
-        enum:
-          - hidden
-          - text
-          - search
-          - tel
-          - url
-          - email
-          - password
-          - datetime
-          - date
-          - month
-          - week
-          - time
-          - datetime-local
-          - number
-          - range
-          - color
-          - checkbox
-          - radio
-          - file
-      title:
-        type: string
-      value:
-        type: string
-
-  SirenLink:
-    type: object
-    required:
-      - rel
-      - href
-    properties:
-      class:
-        type: array
-        items:
-          type: string
-      title:
-        type: string
-      rel:
-        type: array
-        items:
-          type: string
-      href:
-        type: string
-      type:
-        type: string
+        additionalProperties:
+          allOf:
+            - $ref: '#/definitions/hal-link-object'
+            - type: array
+              items:
+                - $ref: '#/definitions/hal-link-object'
+        properties:
+          curies:
+            allOf:
+              - $ref: '#/definitions/hal-curies-link'
+              - type: array
+                items:
+                  - $ref: '#/definitions/hal-curies-link'
+      _embedded:
+        description: |
+          It is an object whose property names are link relation types (as defined by [RFC5988]) and values are either a Resource Object
+          or an array of Resource Objects. Embedded Resources MAY be a full, partial,
+          or inconsistent version of the representation served from the target URI.
+        type: object
+        additionalProperties:
+          allOf:
+            - $ref: '#/definitions/hal-resource'
+            - type: array
+              items:
+                - $ref: '#/definitions/hal-resource'
