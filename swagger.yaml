@@ -4,6 +4,9 @@ info:
   title: '[Demo] Orders API (WIP)'
   description: ''
   
+schemes:
+  - https
+
 produces:
   - application/hal+json
 
@@ -25,7 +28,7 @@ paths:
                   href: /orders
                   
   /orders:
-    x-summary: A list of Orders
+    x-summary: List of Orders
     
     get:
       summary: Retrieve list of Orders
@@ -42,7 +45,25 @@ paths:
           description: Order has been created.
           schema:
             $ref: '#/definitions/hal-resource'
-          
+            
+  /orders/{orderId}:
+    x-summary: Order
+    parameters:
+      - name: orderId
+        in: path
+        description: Id of the Order
+        required: true
+        type: string
+        x-example: 1234
+
+    get:
+      summary: Retrieve Order
+      responses:
+        200:
+          description: A particular Order
+          schema:
+            $ref: '#/definitions/hal-resource'
+
 
 definitions:
   hal-link-object:
