@@ -63,6 +63,28 @@ paths:
           description: A particular Order
           schema:
             $ref: '#/definitions/hal-resource'
+            example:
+              _link:
+                self:
+                  href: /orders/1234
+                  
+    patch:
+      summary: Update Order
+      responses:
+        200:
+          description: The Order was updated
+          schema:
+            $ref: '#/definitions/hal-resource'
+            example:
+              _link:
+                self:
+                  href: /orders/1234          
+    
+    delete:
+      summary: Delete Order
+      responses:
+        204:
+          description: The Order was deleted
 
 
 definitions:
