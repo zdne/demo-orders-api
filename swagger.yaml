@@ -40,6 +40,15 @@ paths:
     
     post:
       summary: Create a new Order
+      consumes:
+        - application/json
+      parameters:
+        - name: Order
+          in: body
+          description: Order to be created
+          required: true
+          schema:
+            $ref: '#/definitions/new-order'
       responses: 
         201:
           description: Order has been created.
@@ -88,6 +97,14 @@ paths:
 
 
 definitions:
+  new-order:
+    type: object
+    properties:
+      message:
+        type: string
+    example:
+      message: Hello!
+      
   hal-link-object:
     title: HAL Link Object
     description: A Link Object represents a hyperlink from the containing resource to a URI.
