@@ -4,9 +4,10 @@ info:
   title: '[Demo] Orders API (WIP)'
   description: ''
 paths: {}
+
 definitions:
   hal-link-object:
-    title: Link Object
+    title: HAL Link Object
     description: A Link Object represents a hyperlink from the containing resource to a URI.
     type: object
     required:
@@ -50,8 +51,7 @@ definitions:
         description: |
           Its value is a string and is intended for indicating the language of the target resource (as defined by [RFC5988]).
         type: string
-    example:
-      href: /some/nice/url
+
   hal-curies-link:
     title: HAL Curies Link
     description: | 
@@ -69,14 +69,7 @@ definitions:
         required:
           - templated
       - $ref: '#/definitions/hal-link-object'
-    example:
-      templated: true
-      href: aute tempor nostrud
-      type: nisi
-      profile: Duis dolor sit amet
-      deprecation: mollit in
-      title: labore cupidatat dolore
-      hreflang: ut ullamco
+
   hal-resource:
     title: HAL Resource Object
     description: |
