@@ -19,7 +19,7 @@ paths:
         200:
           description: The root of the API
           schema:
-            $ref: '#/definitions/apiroot-hal'
+            $ref: '#/definitions/hal-root'
 
   /orders:
     x-summary: List of Orders
@@ -45,9 +45,9 @@ paths:
             $ref: '#/definitions/order'
       responses: 
         201:
-          description: Order has been created.
+          description: Newly created order
           schema:
-            $ref: '#/definitions/hal-resource'
+            $ref: '#/definitions/hal-order'
 
   /orders/{orderId}:
     x-summary: Order
@@ -65,15 +65,24 @@ paths:
         200:
           description: A particular Order
           schema:
-            $ref: '#/definitions/order-hal'
+            $ref: '#/definitions/hal-order'
 
     patch:
       summary: Update Order
+      consumes:
+        - application/json      
+      parameters:
+        - name: Order
+          in: body
+          description: Partial order update
+          required: true
+          schema:
+            $ref: '#/definitions/order-patch'
       responses:
         200:
           description: The Order was updated
           schema:
-            $ref: '#/definitions/hal-resource'
+            $ref: '#/definitions/hal-order'
 
     delete:
       summary: Delete Order
@@ -83,7 +92,7 @@ paths:
           description: The Order was deleted
 
 definitions:
-  apiroot-hal:
+  hal-root:
     type: object
     allOf:
       - $ref: '#/definitions/hal-resource'
@@ -94,7 +103,7 @@ definitions:
         orders:
           href: /orders
     
-  order-hal:
+  hal-order:
     type: object
     allOf:
       - $ref: '#/definitions/hal-resource'
@@ -107,6 +116,13 @@ definitions:
       itemCount: 42
       status: pending
 
+  order-patch:
+    type: object
+    allOf:
+      - $ref: '#/definitions/order'
+    example:
+      status: cancelled
+    
   order:
     type: object
     properties:
