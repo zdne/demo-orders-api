@@ -3,9 +3,33 @@ info:
   version: '1.0.0'
   title: '[Demo] Orders API (WIP)'
   description: ''
-paths: {}
+  
+produces:
+  - application/hal+json
+
+paths:
+  /:
+    x-summary: API Root
+
+    get:
+      summary: Retrieve
+      responses:
+        200:
+          description: The root of the API.
+          schema:
+            $ref: '#/definitions/hal-resource'
 
 definitions:
+  APIRootResponse:
+    type: object
+    properties:
+      message:
+        type: string
+    required:
+      - message
+    example:
+      message: Hello World and Hello Z!
+
   hal-link-object:
     title: HAL Link Object
     description: A Link Object represents a hyperlink from the containing resource to a URI.
@@ -91,6 +115,7 @@ definitions:
                 - $ref: '#/definitions/hal-link-object'
         properties:
           curies:
+            # WARN: Should be "anyOf" but "anyOf" isn't supported in Swagger 2.0
             allOf:
               - $ref: '#/definitions/hal-curies-link'
               - type: array
@@ -102,9 +127,11 @@ definitions:
           or an array of Resource Objects. Embedded Resources MAY be a full, partial,
           or inconsistent version of the representation served from the target URI.
         type: object
-        additionalProperties:
-          allOf:
-            - $ref: '#/definitions/hal-resource'
-            - type: array
-              items:
-                - $ref: '#/definitions/hal-resource'
+        additionalProperties: true
+        # WARN: Apiary doesn't support circular references
+        # additionalProperties:
+        #   anyOf:
+        #     - $ref: '#/definitions/hal-resource'
+        #     - type: array
+        #       items:
+        #         - $ref: '#/definitions/hal-resource'
