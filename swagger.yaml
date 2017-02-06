@@ -10,14 +10,19 @@ produces:
 paths:
   /:
     x-summary: API Root
-
     get:
-      summary: Retrieve
+      summary: Retrieve API Root
       responses:
         200:
           description: The root of the API.
           schema:
             $ref: '#/definitions/hal-resource'
+            example:
+              _links:
+                self:
+                  href: /
+                orders:
+                  href: /orders
 
 definitions:
   APIRootResponse:
