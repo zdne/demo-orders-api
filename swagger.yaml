@@ -108,7 +108,9 @@ paths:
           description: The Order was deleted
 
 definitions:
+  #
   # API Root
+  #
   hal_root:
     type: object
     allOf:
@@ -120,7 +122,9 @@ definitions:
         orders:
           href: /orders
 
-  # Orders
+  #
+  # Orders Resource
+  #
   hal_orders:
     type: object
     allOf:
