@@ -7,8 +7,14 @@ info:
 schemes:
   - https
 
+# consumes:
+#  - application/json
+#  - application/x-www-form-urlencoded
+#  - application/hal+json
+
 produces:
   - application/hal+json
+  - application/vnd.error+json
 
 paths:
   /:
@@ -23,7 +29,6 @@ paths:
 
   /orders:
     x-summary: List of Orders
-    
     get:
       summary: Retrieve list of Orders
       responses:
@@ -43,7 +48,7 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/order'
-      responses: 
+      responses:
         201:
           description: Newly created order
           schema:
@@ -67,10 +72,19 @@ paths:
           schema:
             $ref: '#/definitions/hal-order'
 
+        404:
+          description: The particular Order wasn't found
+          headers:
+            Content-Type:
+              type: string
+              default: application/vnd.error+json
+          schema:
+            $ref: '#/definitions/order-not-found'
+
     patch:
       summary: Update Order
       consumes:
-        - application/json      
+        - application/json
       parameters:
         - name: Order
           in: body
@@ -92,6 +106,7 @@ paths:
           description: The Order was deleted
 
 definitions:
+  # API Root
   hal-root:
     type: object
     allOf:
@@ -102,7 +117,8 @@ definitions:
           href: /
         orders:
           href: /orders
-  
+
+  # Orders
   hal-orders:
     type: object
     allOf:
@@ -111,11 +127,16 @@ definitions:
       _links:
         self:
           href: /orders
-      
+
       _embedded:
         order:
           $ref: '#/definitions/hal-order/example'
-  
+
+  #
+  # Order Resource
+  #
+
+  # HAL Wrapper
   hal-order:
     type: object
     allOf:
@@ -129,13 +150,15 @@ definitions:
       itemCount: 42
       status: pending
 
+  # Partial Order
   order-patch:
     type: object
     allOf:
       - $ref: '#/definitions/order'
     example:
       status: cancelled
-    
+
+  # Order
   order:
     type: object
     properties:
@@ -153,60 +176,116 @@ definitions:
       itemCount: 3
       status: pending
 
+  # Order Not Found Error
+  order-not-found:
+    type: object
+    allOf:
+      - $ref: '#/definitions/vnd.error'
+    example:
+      _links:
+        about:
+          href: /orders/1234
+      message: "cannot find requested order"
+      logref: "REQ0001"
+
+  #
+  # -- DO NOT EDIT BEYOND THIS POINT --
+  #
+
+  # Media Types Definitions
+
+  #
+  # application/vnd.error+json
+  #
+  vnd.error:
+    type: object
+    allOf:
+      - $ref: '#/definitions/hal-resource'
+      - type: object
+        properties:
+          message:
+            type: string
+          path:
+            type: string
+          logref:
+            type: [string, number]
+        required:
+          - message
+
+  #
+  # application/hal+json defintion
+  #
   hal-link-object:
     title: HAL Link Object
-    description: A Link Object represents a hyperlink from the containing resource to a URI.
+    description: |
+      A Link Object represents a hyperlink from the containing resource to a 
+      URI.
     type: object
     required:
       - href
     properties:
       href:
         description: |
-          Its value is either a URI [RFC3986] or a URI Template [RFC6570]. If the value is a URI Template then 
-          the Link Object SHOULD have a "templated" attribute whose value is true.
+          Its value is either a URI [RFC3986] or a URI Template [RFC6570]. 
+          If the value is a URI Template then the Link Object SHOULD have a 
+          templated attribute whose value is true.
         type: string
       templated:
-        description: | 
-          Its value is boolean and SHOULD be true when the Link Object's "href" property is a URI Template. 
-          Its value SHOULD be considered false if it is undefined or any other value than true.
+        description: |
+          Its value is boolean and SHOULD be true when the Link Object's "href" 
+          property is a URI Template. Its value SHOULD be considered false if it 
+          is undefined or any other value than true.
         type: boolean
       type:
         description: |
-          Its value is a string used as a hint to indicate the media type expected when dereferencing the target resource.
+          Its value is a string used as a hint to indicate the media type 
+          expected when dereferencing the target resource.
         type: string
       deprecation:
         description: |
-          Its presence indicates that the link is to be deprecated (i.e. removed) at a future date. 
-          Its value is a URL that SHOULD provide further information about the deprecation. A client SHOULD provide some 
-          notification (for example, by logging a warning message) whenever it traverses over a link that has this property. 
-          The notification SHOULD include the deprecation property''s value so that a client maintainer can easily 
-          find information about the deprecation.
+          Its presence indicates that the link is to be deprecated 
+          (i.e. removed) at a future date. Its value is a URL that SHOULD 
+          provide further information about the deprecation. 
+          A client SHOULD provide some notification (for example, by logging a 
+          warning message) whenever it traverses over a link that has this 
+          property. The notification SHOULD include the deprecation property's 
+          value so that a client maintainer can easily find information about 
+          the deprecation.
         type: string
       name:
         description: |
-          Its value MAY be used as a secondary key for selecting Link Objects which share the same relation type.
+          Its value MAY be used as a secondary key for selecting Link Objects 
+          which share the same relation type.
         type: string
       profile:
         description: |
-          Its value is a string which is a URI that hints about the profile [RFC6906] of the target resource.
+          Its value is a string which is a URI that hints about the profile 
+          [RFC6906] of the target resource.
         type: string
       title:
         description: |
-          Its value is a string and is intended for labelling the link with a human-readable identifier (as defined by [RFC5988]).
+          Its value is a string and is intended for labelling the link with a 
+          human-readable identifier (as defined by [RFC5988]).
         type: string
       hreflang:
         description: |
-          Its value is a string and is intended for indicating the language of the target resource (as defined by [RFC5988]).
+          Its value is a string and is intended for indicating the language of 
+          the target resource (as defined by [RFC5988]).
         type: string
 
   hal-curies-link:
     title: HAL Curies Link
-    description: | 
-      Custom link relation types (Extension Relation Types in [RFC5988]) SHOULD be URIs that when dereferenced in a web browser 
-      provide relevant documentation, in the form of an HTML page, about the meaning and/or behaviour of the target Resource. 
-      This will improve the discoverability of the API. The CURIE Syntax [W3C.NOTE-curie-20101216] MAY be used for brevity for these URIs. 
-      CURIEs are established within a HAL document via a set of Link Objects with the relation type "curies" on the root Resource Object. 
-      These links contain a URI Template with the token ''rel'', and are named via the "name" property.'
+    description: |
+      Custom link relation types (Extension Relation Types in [RFC5988]) SHOULD 
+      be URIs that when dereferenced in a web browser provide relevant 
+      documentation, in the form of an HTML page, about the meaning and/or 
+      behaviour of the target Resource. This will improve the discoverability of
+       the API. The CURIE Syntax [W3C.NOTE-curie-20101216] MAY be used for 
+       brevity for these URIs.
+      CURIEs are established within a HAL document via a set of Link Objects 
+      with the relation type "curies" on the root Resource Object.
+      These links contain a URI Template with the token ''rel'', and are named 
+      via the "name" property.'
     allOf:
       - type: object
         properties:
@@ -220,15 +299,18 @@ definitions:
   hal-resource:
     title: HAL Resource Object
     description: |
-      'A Resource Object represents a resource. It has two reserved properties: (1) `_links` which contain links to other resources,'
-      'and (2) `_embedded` which contain embedded resources. All other properties MUST be valid JSON and represent the current state of the resource.'
+      A Resource Object represents a resource. It has two reserved properties:
+      (1) `_links` which contain links to other resources, and (2) `_embedded` 
+      which contain embedded resources. All other properties MUST be valid JSON 
+      and represent the current state of the resource.
     type: object
     properties:
       _links:
         description: |
-          It is an object whose property names are link relation types (as defined by [RFC5988]) and values are either 
-          a Link Object or an array of Link Objects.  The subject resource of these links is the Resource Object of which
-          the containing "_links" object is a property.
+          It is an object whose property names are link relation types 
+          (as defined by [RFC5988]) and values are either a Link Object or an 
+          array of Link Objects.  The subject resource of these links is the 
+          Resource Object of which the containing "_links" object is a property.
         type: object
         additionalProperties:
           # WARN: Should be "anyOf" but "anyOf" isn't supported in Swagger 2.0
@@ -247,9 +329,11 @@ definitions:
                   - $ref: '#/definitions/hal-curies-link'
       _embedded:
         description: |
-          It is an object whose property names are link relation types (as defined by [RFC5988]) and values are either a Resource Object
-          or an array of Resource Objects. Embedded Resources MAY be a full, partial,
-          or inconsistent version of the representation served from the target URI.
+          It is an object whose property names are link relation types 
+          (as defined by [RFC5988]) and values are either a Resource Object
+          or an array of Resource Objects. Embedded Resources MAY be a full, 
+          partial, or inconsistent version of the representation served from the
+           target URI.
         type: object
         additionalProperties: true
         # WARN: Apiary doesn't support circular references
