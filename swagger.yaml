@@ -75,7 +75,7 @@ paths:
             $ref: '#/definitions/hal_order'
 
         404:
-          description: The particular Order wasn't found
+          description: The request Order wasn't found
           headers:
             Content-Type:
               type: string
