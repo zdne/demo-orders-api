@@ -24,7 +24,7 @@ paths:
         200:
           description: The root of the API
           schema:
-            $ref: '#/definitions/hal-root'
+            $ref: '#/definitions/hal_root'
 
   /orders:
     x-summary: List of Orders
@@ -34,7 +34,7 @@ paths:
         200:
           description: The list of Orders
           schema:
-            $ref: '#/definitions/hal-orders'
+            $ref: '#/definitions/hal_orders'
 
     post:
       summary: Create a new Order
@@ -51,7 +51,7 @@ paths:
         201:
           description: Newly created order
           schema:
-            $ref: '#/definitions/hal-order'
+            $ref: '#/definitions/hal_order'
 
   /orders/{orderId}:
     x-summary: Order
@@ -69,7 +69,7 @@ paths:
         200:
           description: A particular Order
           schema:
-            $ref: '#/definitions/hal-order'
+            $ref: '#/definitions/hal_order'
 
         404:
           description: The particular Order wasn't found
@@ -78,7 +78,7 @@ paths:
               type: string
               default: application/vnd.error+json
           schema:
-            $ref: '#/definitions/order-not-found'
+            $ref: '#/definitions/order_not_found'
 
     patch:
       summary: Update Order
@@ -90,12 +90,12 @@ paths:
           description: Partial order update
           required: true
           schema:
-            $ref: '#/definitions/order-patch'
+            $ref: '#/definitions/order_patch'
       responses:
         200:
           description: The Order was updated
           schema:
-            $ref: '#/definitions/hal-order'
+            $ref: '#/definitions/hal_order'
 
     delete:
       summary: Delete Order
@@ -106,10 +106,10 @@ paths:
 
 definitions:
   # API Root
-  hal-root:
+  hal_root:
     type: object
     allOf:
-      - $ref: '#/definitions/hal-resource'
+      - $ref: '#/definitions/hal_resource'
     example:
       _links:
         self:
@@ -118,10 +118,10 @@ definitions:
           href: /orders
 
   # Orders
-  hal-orders:
+  hal_orders:
     type: object
     allOf:
-      - $ref: '#/definitions/hal-resource'
+      - $ref: '#/definitions/hal_resource'
     example:
       _links:
         self:
@@ -129,17 +129,17 @@ definitions:
 
       _embedded:
         order:
-          $ref: '#/definitions/hal-order/example'
+          $ref: '#/definitions/hal_order/example'
 
   #
   # Order Resource
   #
 
   # HAL Wrapper
-  hal-order:
+  hal_order:
     type: object
     allOf:
-      - $ref: '#/definitions/hal-resource'
+      - $ref: '#/definitions/hal_resource'
       - $ref: '#/definitions/order'
     example:
       _links:
@@ -150,7 +150,7 @@ definitions:
       status: pending
 
   # Partial Order
-  order-patch:
+  order_patch:
     type: object
     allOf:
       - $ref: '#/definitions/order'
@@ -176,10 +176,10 @@ definitions:
       status: pending
 
   # Order Not Found Error
-  order-not-found:
+  order_not_found:
     type: object
     allOf:
-      - $ref: '#/definitions/vnd.error'
+      - $ref: '#/definitions/vnd_error'
     example:
       _links:
         about:
@@ -196,10 +196,10 @@ definitions:
   #
   # application/vnd.error+json
   #
-  vnd.error:
+  vnd_error:
     type: object
     allOf:
-      - $ref: '#/definitions/hal-resource'
+      - $ref: '#/definitions/hal_resource'
       - type: object
         properties:
           message:
@@ -214,7 +214,7 @@ definitions:
   #
   # application/hal+json defintion
   #
-  hal-link-object:
+  hal_link_object:
     type: object
     required:
       - href
@@ -236,7 +236,7 @@ definitions:
       hreflang:
         type: string
 
-  hal-curies-link:
+  hal_curies_link:
     title: HAL Curies Link
     allOf:
       - type: object
@@ -246,9 +246,9 @@ definitions:
               - true
         required:
           - templated
-      - $ref: '#/definitions/hal-link-object'
+      - $ref: '#/definitions/hal_link_object'
 
-  hal-resource:
+  hal_resource:
     title: HAL Resource Object
     type: object
     properties:
@@ -257,25 +257,25 @@ definitions:
         additionalProperties:
           # WARN: Should be "anyOf" but "anyOf" isn't supported in Swagger 2.0
           allOf:
-            - $ref: '#/definitions/hal-link-object'
+            - $ref: '#/definitions/hal_link_object'
             - type: array
               items:
-                - $ref: '#/definitions/hal-link-object'
+                - $ref: '#/definitions/hal_link_object'
         properties:
           curies:
             # WARN: Should be "anyOf" but "anyOf" isn't supported in Swagger 2.0
             allOf:
-              - $ref: '#/definitions/hal-curies-link'
+              - $ref: '#/definitions/hal_curies_link'
               - type: array
                 items:
-                  - $ref: '#/definitions/hal-curies-link'
+                  - $ref: '#/definitions/hal_curies_link'
       _embedded:
         type: object
         additionalProperties: true
         # WARN: Apiary doesn't support circular references
         # additionalProperties:
         #   anyOf:
-        #     - $ref: '#/definitions/hal-resource'
+        #     - $ref: '#/definitions/hal_resource'
         #     - type: array
         #       items:
-        #         - $ref: '#/definitions/hal-resource'
+        #         - $ref: '#/definitions/hal_resource'
