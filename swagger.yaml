@@ -17,6 +17,7 @@ produces:
 paths:
   /:
     x-summary: API Root
+
     get:
       summary: Retrieve API Root
       description: The API Root contains the initial set of link relations.
@@ -28,6 +29,7 @@ paths:
 
   /orders:
     x-summary: List of Orders
+
     get:
       summary: Retrieve list of Orders
       responses:
@@ -55,6 +57,7 @@ paths:
 
   /orders/{orderId}:
     x-summary: Order
+
     parameters:
       - name: orderId
         in: path
