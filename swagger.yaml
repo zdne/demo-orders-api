@@ -12,7 +12,7 @@ schemes:
 
 produces:
   - application/hal+json        # Representation message format
-  - application/vnd.error+json  # Error message format
+  - application/problem+json  # Error message format
 
 paths:
   /:
@@ -79,7 +79,7 @@ paths:
           headers:
             Content-Type:
               type: string
-              default: application/vnd.error+json
+              default: application/problem+json
           schema:
             $ref: '#/definitions/order_not_found'
 
@@ -186,13 +186,12 @@ definitions:
   order_not_found:
     type: object
     allOf:
-      - $ref: '#/definitions/vnd_error'
+      - $ref: '#/definitions/problem_detail'
     example:
-      _links:
-        about:
-          href: /orders/1234
-      message: "cannot find requested order"
-      logref: "REQ0001"
+      title: 'Not Found'
+      detail: 'Cannot find the requested order'
+      status: 404
+      instance: '/orders/1234'
 
   #
   # -- DO NOT EDIT BEYOND THIS POINT --
@@ -219,24 +218,6 @@ definitions:
     required:
       - title
       - detail
-
-  #
-  # application/vnd.error+json
-  #
-  vnd_error:
-    type: object
-    allOf:
-      - $ref: '#/definitions/hal_resource'
-      - type: object
-        properties:
-          message:
-            type: string
-          path:
-            type: string
-          logref:
-            type: [string, number]
-        required:
-          - message
 
   #
   # application/hal+json defintion
