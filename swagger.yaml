@@ -31,7 +31,7 @@ paths:
     x-summary: List of Orders
 
     get:
-      summary: Retrieve list of Orders
+      summary: Retrieve List of Orders
       responses:
         200:
           description: The list of Orders
