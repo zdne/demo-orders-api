@@ -55,11 +55,11 @@ paths:
           schema:
             $ref: '#/definitions/hal_order'
 
-  /orders/{orderId}:
+  /orders/{order_id}:
     x-summary: Order
 
     parameters:
-      - name: orderId
+      - name: order_id
         in: path
         description: Id of the Order
         required: true
