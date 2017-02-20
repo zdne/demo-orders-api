@@ -152,8 +152,8 @@ definitions:
       _links:
         self:
           href: /orders/1234
-      orderNumber: 1234
-      itemCount: 42
+      order_number: 1234
+      item_count: 42
       status: pending
 
   # Partial Order
@@ -175,11 +175,11 @@ definitions:
       status:
         type: string
     required:
-      - orderNumber
-      - itemCount
+      - order_number
+      - item_count
     example:
-      orderNumber: 42
-      itemCount: 3
+      order_number: 42
+      item_count: 3
       status: pending
 
   # Order Not Found Error
