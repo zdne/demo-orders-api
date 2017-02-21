@@ -143,7 +143,7 @@ definitions:
 
       _embedded:
         order:
-          $ref: '#/definitions/hal_order/example'
+          - $ref: '#/definitions/hal_order/example'
 
   #
   # Order Resource
