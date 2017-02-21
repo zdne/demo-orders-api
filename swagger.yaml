@@ -65,6 +65,12 @@ paths:
         required: true
         type: string
         x-example: 1234
+      - name: fields
+        in: query
+        description: Comma-separated list of fields to include in the response
+        required: false
+        type: string
+        x-example: order_number,status
 
     get:
       summary: Retrieve Order
