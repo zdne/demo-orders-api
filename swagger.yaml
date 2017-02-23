@@ -159,6 +159,13 @@ definitions:
       _links:
         self:
           href: /orders/1234
+          
+        edit:
+          href: /orders/1234
+          
+        delete: 
+          href: /orders/1234
+          
       order_number: 1234
       item_count: 42
       status: pending
