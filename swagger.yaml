@@ -167,6 +167,9 @@ definitions:
         delete: 
           href: /orders/1234
           
+        profile:
+          href: https://adidas-group.com/gdm/OMS
+          
       order_number: 1234
       item_count: 42
       status: pending
