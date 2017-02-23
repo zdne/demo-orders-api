@@ -162,6 +162,7 @@ definitions:
           
         edit:
           href: /orders/1234
+          profile: https://tools.ietf.org/html/rfc5023#section-5.4.2
           
         delete: 
           href: /orders/1234
