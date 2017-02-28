@@ -28,10 +28,10 @@ paths:
             $ref: '#/definitions/hal_root'
 
   /orders:
-    x-summary: List of Orders
+    x-summary: List Of Orders
 
     get:
-      summary: Retrieve List of Orders
+      summary: Retrieve List Of Orders
       responses:
         200:
           description: The list of Orders
@@ -39,7 +39,7 @@ paths:
             $ref: '#/definitions/hal_orders'
 
     post:
-      summary: Create a new Order
+      summary: Create A New Order
       consumes:
         - application/json
       parameters:
