@@ -39,7 +39,7 @@ paths:
             $ref: '#/definitions/hal_orders'
 
     post:
-      summary: Create A New Order
+      summary: Create a New Order
       consumes:
         - application/json
       parameters:
