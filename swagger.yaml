@@ -185,9 +185,9 @@ definitions:
   order:
     type: object
     properties:
-      orderNumber:
+      order_number:
         type: number
-      itemCount:
+      item_count:
         type: number
       status:
         type: string
