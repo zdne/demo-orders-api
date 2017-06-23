@@ -4,7 +4,7 @@ info:
   title: '[Demo] Orders API'
   description: |
     Template API conforming to adidas API Guidelines.
-    This API is [documented at Apiary](http://docs.demotemplatewip.apiary.io)
+    This API is [documented at Apiary](http://docs.demotemplate.apiary.io)
     and [stored on GitHub](https://github.com/adidas-group/demo-orders-api).
 
 schemes:
@@ -25,7 +25,7 @@ paths:
         200:
           description: The root of the API
           schema:
-            $ref: '#/definitions/hal_root'
+            $ref: '#/definitions/halRoot'
 
   /orders:
     x-summary: List of Orders
@@ -36,7 +36,7 @@ paths:
         200:
           description: The list of Orders
           schema:
-            $ref: '#/definitions/hal_orders'
+            $ref: '#/definitions/halOrders'
 
     post:
       summary: Create a New Order
@@ -53,7 +53,7 @@ paths:
         201:
           description: Newly created order
           schema:
-            $ref: '#/definitions/hal_order'
+            $ref: '#/definitions/halOrder'
 
   /orders/{order_id}:
     x-summary: Order
@@ -71,7 +71,7 @@ paths:
         description: Comma-separated list of fields to include in the response
         required: false
         type: string
-        x-example: order_number,status
+        x-example: orderNumber,status
 
     get:
       summary: Retrieve Order
@@ -79,7 +79,7 @@ paths:
         200:
           description: A particular Order
           schema:
-            $ref: '#/definitions/hal_order'
+            $ref: '#/definitions/halOrder'
 
         404:
           description: The request Order wasn't found
@@ -88,7 +88,7 @@ paths:
               type: string
               default: application/problem+json
           schema:
-            $ref: '#/definitions/order_not_found'
+            $ref: '#/definitions/orderNotFound'
 
     patch:
       summary: Update Order
@@ -100,12 +100,12 @@ paths:
           description: Partial order update
           required: true
           schema:
-            $ref: '#/definitions/order_patch'
+            $ref: '#/definitions/orderPatch'
       responses:
         200:
           description: The Order was updated
           schema:
-            $ref: '#/definitions/hal_order'
+            $ref: '#/definitions/halOrder'
 
     delete:
       summary: Delete Order
@@ -118,10 +118,10 @@ definitions:
   #
   # API Root
   #
-  hal_root:
+  halRoot:
     type: object
     allOf:
-      - $ref: '#/definitions/hal_resource'
+      - $ref: '#/definitions/halResource'
     example:
       _links:
         self:
@@ -132,10 +132,10 @@ definitions:
   #
   # Orders Resource
   #
-  hal_orders:
+  halOrders:
     type: object
     allOf:
-      - $ref: '#/definitions/hal_resource'
+      - $ref: '#/definitions/halResource'
     example:
       _links:
         self:
@@ -143,17 +143,17 @@ definitions:
 
       _embedded:
         order:
-          - $ref: '#/definitions/hal_order/example'
+          - $ref: '#/definitions/halOrder/example'
 
   #
   # Order Resource
   #
 
   # HAL Wrapper
-  hal_order:
+  halOrder:
     type: object
     allOf:
-      - $ref: '#/definitions/hal_resource'
+      - $ref: '#/definitions/halResource'
       - $ref: '#/definitions/order'
     example:
       _links:
@@ -169,12 +169,12 @@ definitions:
         profile:
           href: https://adidas-group.com/gdm/OMS
           
-      order_number: 1234
-      item_count: 42
+      orderNumber: 1234
+      itemCount: 42
       status: pending
 
   # Partial Order
-  order_patch:
+  orderPatch:
     type: object
     allOf:
       - $ref: '#/definitions/order'
@@ -185,25 +185,25 @@ definitions:
   order:
     type: object
     properties:
-      order_number:
+      orderNumber:
         type: number
-      item_count:
+      itemCount:
         type: number
       status:
         type: string
     required:
-      - order_number
-      - item_count
+      - orderNumber
+      - itemCount
     example:
-      order_number: 42
-      item_count: 3
+      orderNumber: 42
+      itemCount: 3
       status: pending
 
   # Order Not Found Error
-  order_not_found:
+  orderNotFound:
     type: object
     allOf:
-      - $ref: '#/definitions/problem_detail'
+      - $ref: '#/definitions/problemDetail'
     example:
       title: 'Not Found'
       detail: 'Cannot find the requested order'
@@ -219,7 +219,7 @@ definitions:
   #
   # application/problem+json
   #
-  problem_detail:
+  problemDetail:
     type: object
     properties:
       type:
@@ -239,7 +239,7 @@ definitions:
   #
   # application/hal+json defintion
   #
-  hal_link_object:
+  halLinkObject:
     type: object
     required:
       - href
@@ -261,7 +261,7 @@ definitions:
       hreflang:
         type: string
 
-  hal_curies_link:
+  halCuriesLink:
     title: HAL Curies Link
     allOf:
       - type: object
@@ -271,9 +271,9 @@ definitions:
               - true
         required:
           - templated
-      - $ref: '#/definitions/hal_link_object'
+      - $ref: '#/definitions/halLinkObject'
 
-  hal_resource:
+  halResource:
     title: HAL Resource Object
     type: object
     properties:
@@ -282,18 +282,18 @@ definitions:
         additionalProperties:
           # WARN: Should be "anyOf" but "anyOf" isn't supported in Swagger 2.0
           allOf:
-            - $ref: '#/definitions/hal_link_object'
+            - $ref: '#/definitions/halLinkObject'
             - type: array
               items:
-                - $ref: '#/definitions/hal_link_object'
+                - $ref: '#/definitions/halLinkObject'
         properties:
           curies:
             # WARN: Should be "anyOf" but "anyOf" isn't supported in Swagger 2.0
             allOf:
-              - $ref: '#/definitions/hal_curies_link'
+              - $ref: '#/definitions/halCuriesLink'
               - type: array
                 items:
-                  - $ref: '#/definitions/hal_curies_link'
+                  - $ref: '#/definitions/halCuriesLink'
       _embedded:
         type: object
         additionalProperties: true
