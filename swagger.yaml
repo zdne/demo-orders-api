@@ -7,12 +7,21 @@ info:
     This API is [documented at Apiary](http://docs.demotemplate.apiary.io)
     and [stored on GitHub](https://github.com/adidas-group/demo-orders-api).
 
-schemes:
-  - https
-
 produces:
   - application/hal+json      # Representation message format
   - application/problem+json  # Error message format
+
+schemes:
+  - https
+  
+securityDefinitions:
+   "API Key":
+     type: apiKey
+     in: header
+     name: Adidas-API-Key
+
+security:
+  - "API Key": []
 
 paths:
   /:
@@ -29,6 +38,23 @@ paths:
 
   /orders:
     x-summary: List of Orders
+    
+    parameters:
+      - name: offset
+        in: query
+        description: Number of results to skip from the start of the list
+        required: false
+        type: string
+        default: '0'
+        x-example: '10'
+
+      - name: limit
+        in: query
+        description: The maximum number of reusults to return
+        required: false
+        type: string
+        default: '10'
+        x-example: '5'    
 
     get:
       summary: Retrieve List of Orders
@@ -64,14 +90,19 @@ paths:
         description: Id of the Order
         required: true
         type: string
-        x-example: 1234
+        x-example: '1234'
 
       - name: fields
         in: query
         description: Comma-separated list of fields to include in the response
         required: false
-        type: string
-        x-example: orderNumber,status
+        type: array
+        items:
+          type: string
+        collectionFormat: csv
+        x-example: 
+          - orderNumber
+          - status
 
     get:
       summary: Retrieve Order
