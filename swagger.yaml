@@ -171,6 +171,18 @@ definitions:
       _links:
         self:
           href: /orders
+          
+        create:
+          href: /orders
+          
+        next: 
+          href: /orders?offset=5&limit=5
+          
+        first:
+          href: /orders?offset=0&limit=5 
+          
+        last: 
+          href: /orders?offset=40&limit=5          
 
       _embedded:
         order:
