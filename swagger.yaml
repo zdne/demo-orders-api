@@ -288,8 +288,16 @@ definitions:
         type: string
       templated:
         type: boolean
-      type:
-        type: string
+      #
+      # WARN: Some version of OAS parser can have problem with property being called "type"
+      # resulting in the error 'Schema "type" key must be a string'.
+      #
+      # For this reason we have commented out the "type" property of the link object.
+      # See https://tools.ietf.org/html/draft-kelly-json-hal-08#section-5.3 for the definiton of 
+      # HAL's link object type property.
+      #
+      # type:
+      #  type: string
       deprecation:
         type: string
       name:
